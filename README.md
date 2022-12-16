@@ -1,40 +1,47 @@
 # Valstro Exercise
 
 This repository contains the solution to the problem using python 3.9
-It can be executed from host or from docker.
+Can be executed either from the cmd line or from docker.
 
-## Execution from Host
+## Execution from Cmd Line
 
-Requires `Python 3.9` and the installation of the following library:
+Requires `Python 3.9` and the installation of thelibrary `python-socketio`:
 ```
 pip install "python-socketio[client]"
 ```
 
-Once the library is installed the application can use the default `hostname:port`. In this case will 
-connect against: `0.0.0.0:3000`
+The application allows to override the default connection: `0.0.0.0:3000`
 
-To start the application run:
+### Using the defaults
+Just start the application using this command:
 ```
 python3.9 app.py
 ```
 
-If we want to override the default host and port, start the application with
-the parameters to override the host and port:
+### Overriding host and port
+If we want to override the host and port, start the application with
+the following parameters:
 ```
 python3.9  app.py --host 0.0.0.0 --port 3000
 ```
 
-**Note**: If you want to override just one parameter, supply only the parameter to override.
+* --host: IP of the server
+* --port: Port used by server
+
+**Note**: It's not required to override both parameters, we can override the one desired.
 
 ## Execution from Docker
 
+To make easier the execution, we have dockerized the Client implementation.
 If the server is running from Docker, check the container IP address:
+
+**Note**: Replace `server_container_name` by the name of the container of your Server app. 
+
 ```
 docker inspect -f '' server_container_name
 ```
-**Note**: You must replace `server_container_name` by the name of the container of your Server app. 
 
-The inspect command returns a lot of information:
+The previous command returns a lot of information but we're interested only with the **IPAddress**:
 
 ```
 ...
@@ -62,9 +69,7 @@ The inspect command returns a lot of information:
 ...
 ```
 
-However, We're only interested with the **IPAddress** value. In our example is `172.17.0.2` 
-
-Let's build and run the docker with the client implementation.
+Let's build and run the docker with the Client implementation.
 ```
 docker build -t valstro .
 docker run -it --rm --init -e "HOST=172.17.0.2" -e "PORT=3000" valstro
